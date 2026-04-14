@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus</title>
-    </head>
-    <body>
-        PakePlus
-    </body>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>手机离线记事本</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">
+<button class="exit" onclick="exitApp()">退出</button>
+<h2>手机本地版</h2>
+<button class="save" onclick="saveData()">保存到手机</button>
+</div>
+<div class="container">
+<div class="page" id="p1">
+<div class="clock" id="clock">00:00:00</div>
+<div class="date" id="date"></div>
+</div>
+<div class="page" id="p2" style="display:none">
+<div id="alarm_box"></div>
+<button class="add" onclick="addAlarm()">+</button>
+</div>
+<div class="page" id="p3" style="display:none">
+<div id="note_box"></div>
+<button class="add" onclick="addNote()">+</button>
+</div>
+</div>
+<div class="tabbar">
+<div class="tab cur" onclick="switchTab(1)">时钟</div>
+<div class="tab" onclick="switchTab(2)">闹钟</div>
+<div class="tab" onclick="switchTab(3)">笔记</div>
+</div>
+<script src="script.js"></script>
+</body>
 </html>

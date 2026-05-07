@@ -1,36 +1,67 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>手机离线记事本</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的待办清单</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{padding:20px;font-family:微软雅黑;background:#f5f5f5;}
+        .top{display:flex;gap:10px;margin-bottom:20px;}
+        #inputBox{flex:1;padding:12px;border:1px solid #ccc;border-radius:6px;font-size:16px;}
+        #addBtn{padding:12px 20px;background:#2196F3;color:white;border:none;border-radius:6px;}
+        .item{display:flex;justify-content:space-between;align-items:center;background:white;padding:12px;border-radius:6px;margin-bottom:10px;}
+        .delBtn{background:#f44336;color:white;border:none;padding:6px 12px;border-radius:4px;}
+    </style>
 </head>
 <body>
-<div class="header">
-<button class="exit" onclick="exitApp()">退出</button>
-<h2>手机本地版</h2>
-<button class="save" onclick="saveData()">保存到手机</button>
-</div>
-<div class="container">
-<div class="page" id="p1">
-<div class="clock" id="clock">00:00:00</div>
-<div class="date" id="date"></div>
-</div>
-<div class="page" id="p2" style="display:none">
-<div id="alarm_box"></div>
-<button class="add" onclick="addAlarm()">+</button>
-</div>
-<div class="page" id="p3" style="display:none">
-<div id="note_box"></div>
-<button class="add" onclick="addNote()">+</button>
-</div>
-</div>
-<div class="tabbar">
-<div class="tab cur" onclick="switchTab(1)">时钟</div>
-<div class="tab" onclick="switchTab(2)">闹钟</div>
-<div class="tab" onclick="switchTab(3)">笔记</div>
-</div>
-<script src="script.js"></script>
+    <div class="top">
+        <input type="text" id="inputBox" placeholder="输入新待办事项...">
+        <button id="addBtn" onclick="addTask()">添加</button>
+    </div>
+    <div id="list"></div>
+
+    <script>
+        // 页面加载自动读取本地存储
+        window.onload = loadTasks;
+
+        // 添加待办
+        function addTask(){
+            let val = document.getElementById('inputBox').value.trim();
+            if(!val) return;
+
+            let tasks = JSON.parse(localStorage.getItem('todo_list')) || [];
+            tasks.push(val);
+            localStorage.setItem('todo_list', JSON.stringify(tasks));
+
+            document.getElementById('inputBox').value = '';
+            loadTasks();
+        }
+
+        // 渲染列表
+        function loadTasks(){
+            let listDom = document.getElementById('list');
+            listDom.innerHTML = '';
+            let tasks = JSON.parse(localStorage.getItem('todo_list')) || [];
+
+            tasks.forEach((item, idx)=>{
+                let div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <span>${item}</span>
+                    <button class="delBtn" onclick="delTask(${idx})">删除</button>
+                `;
+                listDom.appendChild(div);
+            })
+        }
+
+        // 删除待办
+        function delTask(idx){
+            let tasks = JSON.parse(localStorage.getItem('todo_list')) || [];
+            tasks.splice(idx,1);
+            localStorage.setItem('todo_list', JSON.stringify(tasks));
+            loadTasks();
+        }
+    </script>
 </body>
 </html>
